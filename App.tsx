@@ -1,54 +1,44 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import NumberAdder from './components/NumberAdder';
-import NumberCalculator from './components/NumberCalculator';
-import LoginForm from './components/LoginForm';
-import ContactList from './components/ContactList';
-import TodoApp from './components/TodoApp';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ProductManager from './components/ProductManager';
+import ProductDetail from './components/ProductDetail';
+import { Product } from './context/products';
 
-const Tab = createBottomTabNavigator();
+export type RootStackParamList = {
+  'Product Manager': undefined;
+  'Product Detail': { item: Product };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      <Stack.Navigator
         screenOptions={{
-          tabBarStyle: {
-            backgroundColor: '#f0f4f8',
+          headerStyle: {
+            backgroundColor: '#2a9d8f',
           },
-          tabBarActiveTintColor: '#3498db',
-          tabBarInactiveTintColor: '#2c3e50',
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize: 20,
+          },
+          headerShadowVisible: true,
         }}
       >
-        <Tab.Screen
-          name="NumberAdder"
-          component={NumberAdder}
-          options={{ title: 'Tính Tổng' }}
+        <Stack.Screen
+          name="Product Manager"
+          component={ProductManager}
+          options={{ title: 'Quản lý sản phẩm' }}
         />
-        <Tab.Screen
-          name="NumberCalculator"
-          component={NumberCalculator}
-          options={{ title: 'Min/Max' }}
+        <Stack.Screen
+          name="Product Detail"
+          component={ProductDetail}
+          options={{ title: 'Chi tiết sản phẩm' }}
         />
-        <Tab.Screen
-          name="LoginForm"
-          component={LoginForm}
-          options={{ title: 'Đăng Nhập' }}
-        />
-        <Tab.Screen
-          name="ContactList"
-          component={ContactList}
-          options={{ title: 'Danh Bạ' }}
-        />
-        
-        <Tab.Screen
-          name="TodoApp"
-          component={TodoApp}
-          options={{ title: 'Todo List' }}
-        />
-        
-      </Tab.Navigator>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
