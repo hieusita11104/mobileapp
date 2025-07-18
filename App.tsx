@@ -1,44 +1,30 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProductManager from './components/ProductManager';
-import ProductDetail from './components/ProductDetail';
-import { Product } from './context/products';
+import React, { useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AuthPage from "./screens/AuthPage";
+import DashboardScreen from "./screens/DashboardScreen";
 
-export type RootStackParamList = {
-  'Product Manager': undefined;
-  'Product Detail': { item: Product };
-};
+interface User {
+  username: string;
+  email: string;
+  fullName?: string;
+}
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator();
 
-export default function App() {
+const App: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: '#2a9d8f',
-          },
-          headerTintColor: '#fff',
-          headerTitleStyle: {
-            fontWeight: 'bold',
-            fontSize: 20,
-          },
-          headerShadowVisible: true,
-        }}
-      >
-        <Stack.Screen
-          name="Product Manager"
-          component={ProductManager}
-          options={{ title: 'Quản lý sản phẩm' }}
-        />
-        <Stack.Screen
-          name="Product Detail"
-          component={ProductDetail}
-          options={{ title: 'Chi tiết sản phẩm' }}
-        />
+      <Stack.Navigator initialRouteName={user ? "Dashboard" : "Auth"} screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Auth">
+          {() => <AuthPage setUser={setUser} />}
+        </Stack.Screen>
+        <Stack.Screen name="Dashboard" component={DashboardScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default App;
